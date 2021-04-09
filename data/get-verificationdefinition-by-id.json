@@ -1,0 +1,15 @@
+{
+  "recordNumber": 1,
+  "verificationDefinitionId": "0015Y00002UWiDDQA1",
+  "verificationDefinitionName": "Test Verification Definition",
+  "verificationAttributes": [
+    {
+      "attributeName": "Firstname"
+    }
+  ],
+  "verificationPredicates": [
+    {
+      "predicateName": "Over 21"
+    }
+  ]
+}

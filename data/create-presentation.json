@@ -1,0 +1,16 @@
+{
+  "presentationId": "a0F6g000007Pr5j",
+  "status": "Received",
+  "attributes": [
+    {
+      "name": "Id Expiry Date",
+      "textValue": "2022/12/31"
+    }
+  ],
+  "predicates": [
+    {
+      "name": "over 18?",
+      "result": true
+    }
+  ]
+}

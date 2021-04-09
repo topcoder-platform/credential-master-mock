@@ -1,0 +1,12 @@
+{
+  "recordNumber": 1,
+  "accountId": "0015Y00002UWiDDQA1",
+  "accountName": "Test Account",
+  "processor": "Verity",
+  "defaultAgent": "California Immunization Registry",
+  "defaultCredentialDefinition": "COVID-19 Vaccination Record",
+  "defaultVerificationDefinition": "COVID-19 Vaccination Proof",
+  "defaultAgentId": "a075Y000018TnZtQAK",
+  "defaultCredentialDefinitionId": "a0B5Y00000dqgGpUAI",
+  "defaultVerificationDefinitionId": "a0M5Y00000dRFLBUA4"
+}

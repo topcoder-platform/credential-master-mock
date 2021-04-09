@@ -1,0 +1,23 @@
+{
+  "records": [
+    {
+      "recordNumber": 1,
+      "holderId": "0015Y00002UWiDDQA1",
+      "holderName": "H-0001092",
+      "UUID": "8894ea88-e4d5-d008-5023-dc1084ef9a84",
+      "contactId": "0035Y00002UWiDDQA1",
+      "defaultAgentId": "a0M5Y00000dRFLBUA4",
+      "identifiers": [
+        {
+          "identifier": "8894ea88-e4d5-d008-5023-dc1084ef9a84"
+        }
+      ],
+      "connections": [
+        {
+          "agentId": "a0M5Y00000dRFLBUA4",
+          "status": "Connected"
+        }
+      ]
+    }
+  ]
+}

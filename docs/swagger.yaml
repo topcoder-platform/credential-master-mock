@@ -1,0 +1,1096 @@
+openapi: 3.0.0
+info:
+    version: v1-oas3
+    title: 'Credential Master REST API for Applications'
+    description: 'Authenticated REST API access to core Credential Master functionality, for use by external Credential-Oriented Applications'
+servers:
+    -
+        url: 'https://credentialmaster.my.force.com/v1'
+
+# start of components - schemas
+
+components:
+    schemas:
+        Account:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                accountId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                accountName: 
+                    type: string
+                    example: Test Account
+                processor:
+                    type: string
+                    example: Verity
+                defaultAgent: 
+                    type: string
+                    example: California Immunization Registry
+                defaultCredentialDefinition: 
+                    type: string
+                    example: COVID-19 Vaccination Record
+                defaultVerificationDefinition: 
+                    type: string
+                    example: COVID-19 Vaccination Proof
+                defaultAgentId:
+                    type: string
+                    example: a075Y000018TnZtQAK
+                defaultCredentialDefinitionId: 
+                    type: string
+                    example: a0B5Y00000dqgGpUAI
+                defaultVerificationDefinitionId: 
+                    type: string
+                    example: a0M5Y00000dRFLBUA4
+
+        Accounts:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Account'
+
+        PresentationInput:
+            type: object
+            required:
+                - holderIdentifier
+                - clientId
+            properties:
+                holderIdentifier:
+                    type: string
+                    example: test@test.com
+                clientId:
+                    type: string
+                    example: CAS
+                callbackUrl:
+                    type: string
+                    example: https://casserverdemo.herokuapp.com/cas/cmcallback
+                verificationDefinitionId:
+                    type: string
+                    example: a0G6g0000042NYW
+                accountId:
+                    type: string
+                    example: null
+
+        PresentationOutput:
+            type: object
+            properties:
+                presentationId:
+                    type: string
+                    example: a0F6g000007Pr5j
+                status:
+                    type: string
+                    example: Received
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PresentationAttribute'
+                predicates:
+                    type: array
+                    items: 
+                        $ref: '#/components/schemas/PresentationPredicate'
+
+        PresentationAttribute:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: Id Expiry Date
+                textValue:
+                    type: string
+                    example: 2022/12/31
+
+        PresentationPredicate:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: over 18?
+                result:
+                    type: boolean
+                    example: true
+
+        PresentationCallback:
+            type: object
+            properties:
+                presentationId:
+                    type: string
+                success:
+                    type: boolean
+                message:
+                    type: string
+                claims:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Claim'
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PresentationAttribute'
+
+        Claim:
+            type: string
+
+        Error:
+            type: object
+            properties:
+                message:
+                    type: string
+
+        IssueGroupInput:
+            type: object
+            # TBD
+
+        IssueGroupMembersInput:
+            type: object
+            # TBD
+
+        Credentials:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Credential'
+
+        CredentialsInput:
+            type: object
+            properties:
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CredentialInput'
+
+        CredentialsOutput:
+            type: object
+            properties:
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Credential'
+
+        Credential:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                credentialId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                credentialName: 
+                    type: string
+                    example: Test Account
+                credentialDefinitionId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                connectionId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                holderIdentifier:
+                    type: string
+                    example: 8894ea88-e4d5-d008-5023-dc1084ef9a84
+                holderId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                contactId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                agentId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                state:
+                    type: string
+                    example: ready to offer
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Attribute'
+
+        CredentialInput:
+            type: object
+            properties: 
+                credentialDefinitionId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                connectionId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                state:
+                    type: string
+                    example: offered
+                    description: allowed values are - new, built, or offered
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Attribute'
+
+        Holders:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Holder'
+
+        HoldersInput:
+            type: object
+            properties:
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/HolderInput'
+
+        HoldersOutput:
+            type: object
+            properties:
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Holder'
+
+        Holder:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                holderId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                holderName: 
+                    type: string
+                    example: H-0001092
+                UUID: 
+                    type: string
+                    example: 8894ea88-e4d5-d008-5023-dc1084ef9a84 
+                contactId:
+                    type: string
+                    example: 0035Y00002UWiDDQA1
+                initialAgentId:
+                    type: string
+                    example: a0M5Y00000dRFLBUA4
+                identifiers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/HolderIdentifier'
+                connections:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Connection'
+
+        HolderInput:
+            type: object
+            properties: 
+                UUID: 
+                    type: string
+                    example: 8894ea88-e4d5-d008-5023-dc1084ef9a84 
+                contactId:
+                    type: string
+                    example: 0035Y00002UWiDDQA1
+                defaultAgentId:
+                    type: string
+                    example: a0M5Y00000dRFLBUA4
+                identifiers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/HolderIdentifier'
+
+        HolderIdentifier:
+            type: object
+            properties:
+                identifier:
+                    type: string
+                    example: 8894ea88-e4d5-d008-5023-dc1084ef9a84
+
+        Connection:
+            type: object
+            properties:
+                agentId:
+                    type: string
+                    example: a0M5Y00000dRFLBUA4
+                status:
+                    type: string
+                    example: Connected
+
+        Schemas:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Schema'
+
+        Schema:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                schemaId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                schemaName: 
+                    type: string
+                    example: Test Schema
+
+        CredentialDefinitions:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CredentialDefinition'
+
+        CredentialDefinition:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                credentialDefinitionId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                credentialDefinitionName: 
+                    type: string
+                    example: Test Credential Definition
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Attribute'
+
+        Attribute:
+            type: object
+            properties:
+                attributeName:
+                    type: string
+                    example: Firstname
+                type:
+                    type: string
+                    example: text
+                textValue:
+                    type: string
+                    example: Fred
+                # TBD
+
+        VerificationDefinitions:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/VerificationDefinition'
+ 
+        VerificationDefinition:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                verificationDefinitionId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                verificationDefinitionName: 
+                    type: string
+                    example: Test Verification Definition
+                verificationAttributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/VerificationAttribute'
+                verificationPredicates:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/VerificationPredicate'
+
+        VerificationAttribute:
+            type: object
+            properties:
+                attributeName:
+                    type: string
+                    example: Firstname
+
+        VerificationPredicate:
+            type: object
+            properties:
+                predicateName:
+                    type: string
+                    example: Over 21
+
+        IssueGroupMembers:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IssueGroupMember'
+
+        IssueGroupMember:
+            type: object
+            # TBD
+
+        IssueGroups:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    example: 1
+                pageSize:
+                    type: integer
+                    example: 10
+                totalPages:
+                    type: integer
+                    example: 5
+                totalRecords:
+                    type: integer
+                    example: 54
+                morePages:
+                    type: boolean
+                    example: true
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IssueGroup'
+        
+        IssueGroup:
+            type: object
+            properties: 
+                recordNumber:
+                    type: integer
+                    example: 1
+                issueGroupId:
+                    type: string
+                    example: 0015Y00002UWiDDQA1
+                issueGroupName: 
+                    type: string
+                    example: Test Issue Group
+
+# start of paths
+ 
+paths:
+
+#accounts
+
+    /accounts:
+
+        get:
+            description: 'get all accounts with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/Accounts'
+
+    /accounts/{id}:
+
+        get:
+            description: 'gets an account by id'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/Account'
+                '404':
+                    description: 'Not Found'
+
+#presentations
+
+    /presentations:
+
+        post:
+            description: 
+                'Request a presentation from a holder.  
+                holderIdentifier is a unique identifier associated with the Holder, used to identify the Holder that the presentation request is sent to.  
+                If the calling application supports callback, the callbackUrl field specifies the callback endpoint to which the presentation is posted.
+                Either verificationDefinitionId or accountId must be provided, to identify the verification definition to be used.'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PresentationInput'
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json':
+                            schema:
+                                $ref: '#/components/schemas/PresentationOutput'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json':
+                            schema:
+                                $ref: '#/components/schemas/Error'
+
+    /presentations/{id}:
+
+        get:
+            description: 'get a presentation, including status and optionally proof attributes and predicates'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json':
+                            schema:
+                                $ref: '#/components/schemas/PresentationOutput'
+                '404':
+                    description: 'Not Found'
+
+#issue groups
+
+    /issuegroups:
+
+        get:
+            description: 'get all issue groups with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses:
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/IssueGroups'
+
+        post:
+            description: 'create a new issue group'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/IssueGroupInput'
+            responses:
+                200:
+                    description: OK
+
+    /issuegroups/{id}:
+
+        get:
+            description: 'get an issue group by id'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+
+            responses:
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/IssueGroup'
+                '404':
+                    description: 'Not Found'
+
+        patch:
+            description: 'change the state of an issue group'
+            responses:
+                200:
+                    description: OK
+
+        delete:
+            description: 'delete a specific issue group by Id'
+            responses:
+                200:
+                    description: OK
+
+    /issuegroups/{id}/members:
+
+        get:
+            description: 'get the members for an issue group with paging'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses:
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/IssueGroupMembers'
+
+        post:
+            description: 'add member records to an issue group'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/IssueGroupMembersInput'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses:
+                200:
+                    description: OK
+
+#holders
+
+    /holders:
+
+        get:
+            description: 'get all holders with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/Holders'
+        post:
+            description: 'create one or more new holders, with optional holder identifiers'
+            parameters:
+                -
+                    name: allornone
+                    in: query
+                    description: when multiple records are posted and allornone=true, if there are any errors, all inserts are rolled back
+                    schema: 
+                        type: boolean
+                        default: false
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HoldersInput'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HoldersOutput'
+
+    /holders/{id}:
+
+        get:
+            description: gets one holder by id
+            parameters:
+                -
+                    name: id
+                    description: this is either internal id, UUID, or a holder identifier
+                    in: path
+                    required: true
+                    schema: 
+                        type: string
+                        example: 8894ea88-e4d5-d008-5023-dc1084ef9a84
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/Holder'
+                '404':
+                    description: 'Not Found'
+
+#credentials
+
+    /credentials:
+
+        get:
+            description: 'get all credentials with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/Credentials'
+
+        post:
+            summary: create one or more new credentials, and optionally build and offer
+            description: create one or more new credentials, with an end state as specified in the state field - new, built, or offered
+            parameters:
+                -
+                    name: allornone
+                    in: query
+                    description: when multiple records are posted and allornone=true, if there are any errors, all inserts are rolled back
+                    schema: 
+                        type: boolean
+                        default: false
+                -
+                    name: replace
+                    in: query
+                    description: if provided or set to true, earlier credentials for the same connection will be revoked and replaced 
+                    schema: 
+                        type: boolean
+                        default: false
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CredentialsInput'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CredentialsOutput'
+
+    /credentials/{id}:
+
+        get:
+            description: 'get a specific credential by Id'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses: 
+                200: 
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/Credential'
+                '404':
+                    description: 'Not Found'
+
+        patch:
+            description: 'change the state of a credential'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: 
+                        type: string
+                -
+                    name: state
+                    in: query
+                    required: true
+                    description: allowed values are [build, offer, issue, revoke]
+                    schema:
+                        type: string
+                        example: revoke
+            responses: 
+                200:
+                    description: OK
+                400:
+                    description: invalid value for state parameter
+
+# credential definitions
+
+    /credentialdefinitions:
+
+        get:
+            description: 'get all credential definitions, with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses: 
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/CredentialDefinitions'
+
+    /credentialdefinitions/{id}:
+
+        get:
+            description: 'get a specific credential definition by Id'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses: 
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/CredentialDefinition'
+                '404':
+                    description: 'Not Found'
+
+# verification definitions
+
+    /verificationdefinitions:
+
+        get:
+            description: 'get all verification definitions, with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses: 
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/VerificationDefinitions'
+
+    /verificationdefinitions/{id}:
+
+        get:
+            description: 'get a specific verification definition by Id'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses: 
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/VerificationDefinition'
+                '404':
+                    description: 'Not Found'
+
+# schemas
+
+    /schemas:
+
+        get:
+            description: 'get all schemas, with paging'
+            parameters:
+                -
+                    name: page
+                    in: query
+                    description: 'the page number to return'
+                    schema: {type: integer, default: 1}
+                -
+                    name: page_size
+                    in: query
+                    description: 'the number of records to return per page'
+                    schema: {type: integer, default: 100}
+            responses: 
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/Schemas'
+
+    /schemas/{id}:
+
+        get:
+            description: 'get a specific schema by Id'
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema: {type: string}
+            responses: 
+                200:
+                    description: OK
+                    content:
+                        'application/json':
+                            schema: 
+                                $ref: '#/components/schemas/Schema'
+                '404':
+                    description: 'Not Found'
+
+# END
