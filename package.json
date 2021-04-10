@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "eslint ./**/*.js",
-    "lint:fix": "eslint ./**/*.js --fix"
+    "lint": "eslint \"./**/*.js\"",
+    "lint:fix": "eslint \"./**/*.js\" --fix"
   },
   "author": "",
   "license": "ISC",

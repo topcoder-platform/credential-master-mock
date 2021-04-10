@@ -32,6 +32,7 @@ postPresentation.schema = Joi.object({
   callbackUrl: Joi.string().allow(null),
   verificationDefinitionId: Joi.string().allow(null),
   accountId: Joi.string().allow(null),
+  persist: Joi.boolean().allow(null),
 });
 
 /**

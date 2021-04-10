@@ -89,6 +89,10 @@ components:
                 accountId:
                     type: string
                     example: null
+                persist:
+                    description: specifies if the presentation result should be persisted on the database
+                    type: boolean
+                    default: true
 
         PresentationOutput:
             type: object
@@ -220,9 +224,6 @@ components:
                 connectionId:
                     type: string
                     example: 0015Y00002UWiDDQA1
-                holderIdentifier:
-                    type: string
-                    example: 8894ea88-e4d5-d008-5023-dc1084ef9a84
                 holderId:
                     type: string
                     example: 0015Y00002UWiDDQA1
@@ -246,9 +247,9 @@ components:
                 credentialDefinitionId:
                     type: string
                     example: 0015Y00002UWiDDQA1
-                connectionId:
+                holderIdentifier:
                     type: string
-                    example: 0015Y00002UWiDDQA1
+                    example: 8894ea88-e4d5-d008-5023-dc1084ef9a84
                 state:
                     type: string
                     example: offered
@@ -295,7 +296,7 @@ components:
                 records:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Holder'
+                        $ref: '#/components/schemas/HolderOutput'
 
         Holder:
             type: object
@@ -315,7 +316,7 @@ components:
                 contactId:
                     type: string
                     example: 0035Y00002UWiDDQA1
-                initialAgentId:
+                defaultAgentId:
                     type: string
                     example: a0M5Y00000dRFLBUA4
                 identifiers:
@@ -336,13 +337,29 @@ components:
                 contactId:
                     type: string
                     example: 0035Y00002UWiDDQA1
-                defaultAgentId:
+                initialAgentId:
                     type: string
                     example: a0M5Y00000dRFLBUA4
                 identifiers:
                     type: array
                     items:
                         $ref: '#/components/schemas/HolderIdentifier'
+
+        HolderOutput:
+            type: object
+            properties: 
+                success: 
+                    type: boolean
+                    example: true 
+                message:
+                    type: string
+                    example: OK
+                recordId:
+                    type: string
+                    example: a0M5Y00000dRFLBUA4
+                holder:
+                    type: object
+                    $ref: '#/components/schemas/Holder'
 
         HolderIdentifier:
             type: object
@@ -449,7 +466,20 @@ components:
                 textValue:
                     type: string
                     example: Fred
-                # TBD
+                numberValue:
+                    type: number
+                    example: 123
+                dateValue:
+                    type: string
+                    example: "2001-01-01"
+                datetimeValue:
+                    type: string
+                    example: "2001-01-01T18:25:43Z"
+                booleanValue:
+                    type: boolean
+                    example: true
+                urlValue:
+                    type: string
 
         VerificationDefinitions:
             type: object
@@ -812,7 +842,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Holders'
         post:
-            description: 'create one or more new holders, with optional holder identifiers'
+            description: create one or more new holders, with optional holder identifiers.  If an initialAgentId is provided, a Connection is also created, and if the Contact has an email address, a Connection invite is sent out.
             parameters:
                 -
                     name: allornone
@@ -897,7 +927,7 @@ paths:
                 -
                     name: replace
                     in: query
-                    description: if provided or set to true, earlier credentials for the same connection will be revoked and replaced 
+                    description: If provided or set to true, earlier credentials for the same connection and definition will be revoked and effectively replaced. Some wallets may be configured to allow the Holder to choose to have old, revoked credentials deleted from the wallet, as a new one is accepted.
                     schema: 
                         type: boolean
                         default: false
@@ -948,10 +978,10 @@ paths:
                     name: state
                     in: query
                     required: true
-                    description: allowed values are [build, offer, issue, revoke]
+                    description: allowed values are [built, offered, revoked]
                     schema:
                         type: string
-                        example: revoke
+                        example: revoked
             responses: 
                 200:
                     description: OK
