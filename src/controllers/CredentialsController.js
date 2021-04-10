@@ -32,13 +32,18 @@ postCredentials.schema = Joi.object({
   records: Joi.array().items(
     Joi.object({
       credentialDefinitionId: Joi.string().allow(null),
-      connectionId: Joi.string().allow(null),
+      holderIdentifier: Joi.string().allow(null),
       state: Joi.string().valid("new", "built", "offered"),
       attributes: Joi.array().items(
         Joi.object({
           attributeName: Joi.string().allow(null),
           type: Joi.string().allow(null),
           textValue: Joi.string().allow(null),
+          numberValue: Joi.number().allow(null),
+          dateValue: Joi.date().allow(null),
+          datetimeValue: Joi.date().allow(null),
+          booleanValue: Joi.boolean().allow(null),
+          urlValue: Joi.string().allow(null),
         })
       ),
     })

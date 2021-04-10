@@ -31,7 +31,7 @@ postHolders.schema = Joi.object({
     Joi.object({
       UUID: Joi.string().allow(null),
       contactId: Joi.string().allow(null),
-      defaultAgentId: Joi.string().allow(null),
+      initialAgentId: Joi.string().allow(null),
       identifiers: Joi.array().items(
         Joi.object({
           identifier: Joi.string().allow(null),
